@@ -2,6 +2,9 @@
 #include "../RayTracer2.0/Vec4.h"
 #include "../RayTracer2.0/Color.h"
 #include "../RayTracer2.0/Matrix.h"
+#include "../RayTracer2.0/Ray.h"
+#include "../RayTracer2.0/Shape.h"
+#include "../RayTracer2.0/Intersection.h"
 
 TEST(testTestCase, TestTest) {
 	Vec4 a(1, 2, 3, 4);
@@ -10,7 +13,7 @@ TEST(testTestCase, TestTest) {
 }
 
 TEST(VectorTest, LenghtTest) {
-	ASSERT_EQ(true,compareFloat(std::sqrt(14), Vec4(-1, -2, -3, 0).GetLength()));
+	ASSERT_EQ(true,compareFloat(float(std::sqrt(14)), Vec4(-1, -2, -3, 0).GetLength()));
 }
 
 TEST(VectorTest, NormalizedVecTest) {
@@ -151,11 +154,53 @@ TEST(MatrixTest, RotationMatX) {
 	Vec4 p(0, 1, 0, 1);
 	Matrix half_quarter_Rot_x = Matrix::GetRotationZMat(deg_to_rad(45));
 	Matrix full_quarter_Rot_x = Matrix::GetRotationZMat(deg_to_rad(90));
-	
-	
 
 	ASSERT_EQ(Vec4(-float(std::sqrt(2)) / 2.0f,  float(std::sqrt(2)) / 2.0f, 0, 1), half_quarter_Rot_x * p);
-	ASSERT_EQ(Vec4(-1, 0, 0, 1), full_quarter_Rot_x * p);
-	
-	
+	ASSERT_EQ(Vec4(-1, 0, 0, 1), full_quarter_Rot_x * p);	
 }
+
+//TEST(RayTest, PositionAtTest) {
+//	Ray r(Vec4::MakePoint(2, 3, 4), Vec4::MakeVector(1, 0, 0));
+//
+//	ASSERT_EQ(Vec4::MakePoint(1, 3, 4), r.PositionAt(-1));
+//}
+//
+//TEST(IntersectionTest, RaySphereIntersecTest) {
+//	Ray r(Vec4::MakePoint(0, 0, 5), Vec4::MakeVector(0, 0, 1));
+//	Sphere s;
+//	auto intersects = Intersect(s, r);
+//
+//	ASSERT_EQ(true, compareFloat(intersects.first.t, -6.f));
+//	ASSERT_EQ(true, compareFloat(intersects.second.t, -4.0f));
+//}
+//
+//TEST(IntersectionTest, IntersectionsListTest) {
+//	Sphere s;
+//	std::vector<Intersection> intersections;
+//	intersections.emplace_back(5, &s);
+//	intersections.emplace_back(7, &s);
+//	intersections.emplace_back(-3, &s);
+//	intersections.emplace_back(2, &s);
+//	std::sort(intersections.begin(), intersections.end());
+//	auto intersec = Hit(intersections);
+//
+//	ASSERT_EQ(true, compareFloat(intersec.t, 2));
+//}
+//
+//TEST(IntersectioTest, ScaledSphereIntersectionTest) {
+//	Ray r(Vec4::MakePoint(0, 0, -5), Vec4::MakeVector(0, 0, 1));
+//	Sphere s;
+//	s.SetTrasnformMat(Matrix::GetUniformScalingMat(2));
+//	auto intersec = Intersect(s, r);
+//	ASSERT_EQ(true, compareFloat(3, intersec.first.t));
+//	ASSERT_EQ(true, compareFloat(7, intersec.second.t));
+//}
+//
+//TEST(IntersectioTest, TranslatedSphereIntersectionTest) {
+//	Ray r(Vec4::MakePoint(0, 0, -5), Vec4::MakeVector(0, 0, 1));
+//	Sphere s;
+//	s.SetTrasnformMat(Matrix::GetTranslationMat(5,0,0));
+//	auto intersec = Intersect(s, r);
+//	ASSERT_EQ(nullptr, intersec.first.object);
+//	
+//}

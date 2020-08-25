@@ -11,6 +11,14 @@ public:
 public:
 	Vec4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w){}
 	Vec4() = default;
+
+	static Vec4 MakePoint(float x, float y, float z) {
+		return Vec4(x, y, z, 1);
+	}
+
+	static Vec4 MakeVector(float x, float y, float z) {
+		return Vec4(x, y, z, 0);
+	}
 	
 	Vec4& operator/=(float rhs) {
 		x /= rhs;
@@ -54,6 +62,10 @@ public:
 		z -= rhs.z;
 		w -= rhs.w;
 		return *this;
+	}
+
+	float operator*(const Vec4& rhs)const {
+		return DotProduct(rhs);
 	}
 
 	Vec4 operator-(const Vec4& rhs)const {

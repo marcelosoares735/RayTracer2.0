@@ -1,6 +1,7 @@
 #pragma once
 #include "SDL.h"
 #include "Color.h"
+#include "Shape.h"
 
 class Canvas {
 
@@ -20,6 +21,6 @@ public:
 	void update();
 	void setPixel(int x, int y, Color color);
 	void clearScreen();
-	//void render(Camera camera, World* world);
+	void render(const Sphere& s);
 	
 };

@@ -163,13 +163,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Canvas.cpp" />
+    <ClCompile Include="Intersection.cpp" />
+    <ClCompile Include="Ray.cpp" />
     <ClCompile Include="RayTracer2.0.cpp" />
+    <ClCompile Include="Shape.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="FloatCompare.h" />
+    <ClInclude Include="Intersection.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Ray.h" />
+    <ClInclude Include="Shape.h" />
     <ClInclude Include="Vec4.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

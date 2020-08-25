@@ -2,6 +2,9 @@
 #include <iostream>
 #include <algorithm>
 #include <cassert>
+#include "Ray.h"
+#include "Intersection.h"
+
 
 bool Canvas::init() {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -51,10 +54,10 @@ void Canvas::setPixel(int x, int y, Color color) {
 	
 	Uint32 finalColor = 0;
 
-	Uint8 r = std::clamp(Uint32(color.r * 255), Uint32(0), Uint32(255));
-	Uint8 g = std::clamp(Uint32(color.g * 255), Uint32(0), Uint32(255));
-	Uint8 b = std::clamp(Uint32(color.b * 255), Uint32(0), Uint32(255));
-	finalColor += (r << 8 | g << 16 | b << 24 | 0xff );
+	Uint8 r = std::clamp(Uint8(color.r * 255), Uint8(0), Uint8(255));
+	Uint8 g = std::clamp(Uint8(color.g * 255), Uint8(0), Uint8(255));
+	Uint8 b = std::clamp(Uint8(color.b * 255), Uint8(0), Uint8(255));
+	finalColor += (r << 24 | g << 16 | b << 8 | 0xff );
 	/*finalColor <<= 8;
 	finalColor += green;
 	finalColor <<= 8;
@@ -95,15 +98,29 @@ void Canvas::clearScreen() {
 	memset(m_buffer, 0, width * height * sizeof(Uint32));
 }
 
-//void Canvas::render(Camera camera, World * world) {
-//	for (int y = 0; y < camera.vsize; y++) {
-//		for (int x = 0; x < camera.hsize; x++) {
-//			Ray ray;
-//			ray.rayForPixel(camera, x, y);
-//			Color color = colorAt(world, ray);
-//			setPixel(x, y, color);
-//			update();
-//			processEvents();
-//		}
-//	}
-//}
+void Canvas::render(const Sphere& s) {
+	float wall_z = 10;
+	float wall_size = 7;
+	float pixel_size = wall_size / width;
+	float half = wall_size / 2;
+	std::vector<Intersection> intersections;
+	intersections.reserve(2);
+	for (int y = 0; y < height; y++) {
+		float world_y = half - y * pixel_size ;
+		for (int x = 0; x < width; x++) {
+			float world_x = -half + pixel_size * x;
+			Vec4 position = Vec4::MakePoint(world_x, world_y, wall_z);
+			Ray ray;
+			ray.SetOrigin(Vec4::MakePoint(0, 0, -5));
+			ray.SetDir((position - ray.GetOrigin()).Normalize());
+			auto intersec = Intersect(s, ray);
+			intersections.push_back(intersec.first);
+			intersections.push_back(intersec.second);
+			if(Hit(intersections).object != nullptr)
+				setPixel(x, y, Colors::Blue);
+			update();
+			processEvents();
+			intersections.clear();
+		}
+	}
+}
