@@ -143,6 +143,19 @@ TEST(MatrixTest, inverseMatTest) {
 						-0.07778f, 0.03333f, 0.36667f, -0.33333f,
 						-0.02901f,-0.14630f, -0.10926f,0.12963f,
 						0.17778f, 0.06667f, -0.26667f, 0.33333f };
-	Matrix inv(auxinv,4);
+	Matrix inv(auxinv, 4);
 	ASSERT_EQ(inv, Matrix::GetInverse(a));
+}
+
+TEST(MatrixTest, RotationMatX) {
+	Vec4 p(0, 1, 0, 1);
+	Matrix half_quarter_Rot_x = Matrix::GetRotationZMat(deg_to_rad(45));
+	Matrix full_quarter_Rot_x = Matrix::GetRotationZMat(deg_to_rad(90));
+	
+	
+
+	ASSERT_EQ(Vec4(-float(std::sqrt(2)) / 2.0f,  float(std::sqrt(2)) / 2.0f, 0, 1), half_quarter_Rot_x * p);
+	ASSERT_EQ(Vec4(-1, 0, 0, 1), full_quarter_Rot_x * p);
+	
+	
 }

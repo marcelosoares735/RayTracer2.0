@@ -109,6 +109,52 @@ public:
 
 		return scalingMat;
 	}
+
+	static Matrix GetRotationXMat(float angle) {
+		Matrix rotX = GetIdentity();
+		rotX(1, 1) = std::cos(angle);
+		rotX(1, 2) = -std::sin(angle);
+		rotX(2, 1) = std::sin(angle);
+		rotX(2, 2) = std::cos(angle);
+
+		return rotX;
+	}
+
+	static Matrix GetRotationYMat(float angle) {
+		Matrix rotY = GetIdentity();
+		rotY(0, 0) = std::cos(angle);
+		rotY(0, 2) = std::sin(angle);
+		rotY(2, 0) = -std::sin(angle);
+		rotY(2, 2) = std::cos(angle);
+
+		return rotY;
+	}
+
+	static Matrix GetRotationZMat(float angle) {
+		Matrix rotZ = GetIdentity();
+		rotZ(0, 0) = std::cos(angle);
+		rotZ(0, 1) = -std::sin(angle);
+		rotZ(1, 0) = std::sin(angle);
+		rotZ(1, 1) = std::cos(angle);
+
+		return rotZ;
+	}
+
+	static Matrix GetRotationMat(float angle_x, float angle_y, float angle_z) {
+		return GetRotationXMat(angle_x) * GetRotationYMat(angle_y) * GetRotationZMat(angle_z);
+	}
+
+	static Matrix GetShearMat(float x_y, float x_z, float y_x, float y_z, float z_x, float z_y) {
+		Matrix shear = GetIdentity();
+		shear(0, 1) = x_y;
+		shear(0, 2) = x_z;
+		shear(1, 0) = y_x;
+		shear(1, 2) = y_z;
+		shear(2, 0) = z_x;
+		shear(2, 1) = z_y;
+
+		return shear;
+	}
 	
 	Matrix(int order = 4): size(order) {
 		std::memset(data, 0, sizeof(float) * 16);
@@ -139,9 +185,13 @@ public:
 	}
 
 	bool operator==(const Matrix& rhs)const {
-		return size == rhs.size && std::equal(std::begin(data),
-											  std::end(data),
-											  std::begin(rhs.data));
+		if (size != rhs.size) return false;
+
+		for(int i = 0; i < size * size; ++i) {
+			if (!compareFloat(data[i], rhs.data[i])) return false;
+		}
+
+		return true;
 	}
 
 	Matrix& operator*=(const Matrix& rhs) {
@@ -196,5 +246,9 @@ public:
 		}
 		
 		return det;
+	}
+
+	Matrix Inverse() const {
+		return GetInverse(*this);
 	}
 };
