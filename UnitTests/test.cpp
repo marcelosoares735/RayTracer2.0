@@ -204,3 +204,18 @@ TEST(MatrixTest, RotationMatX) {
 //	ASSERT_EQ(nullptr, intersec.first.object);
 //	
 //}
+
+TEST(NormalTest, TransformedNormal) {
+	Sphere s;
+	s.SetTransformMat(Matrix::GetScalingMat(1, 0.5f, 1) * Matrix::GetRotationZMat(PI / 5));
+	Vec4 n = s.NormalAt(Vec4::MakePoint(0, sqrt(2.f) / 2, -sqrt(2.f) / 2));
+
+	ASSERT_EQ(Vec4::MakeVector(0, 0.97014f, -0.24254f), n);
+}
+
+TEST(VectorTest, ReflectVectoTest) {
+	Vec4 v = Vec4::MakeVector(0, -1, 0);
+	Vec4 n = Vec4::MakeVector(sqrt(2.f) / 2, sqrt(2.f) / 2, 0);
+
+	ASSERT_EQ(Vec4::MakeVector(1, 0, 0), v.GetReflected(n));
+}

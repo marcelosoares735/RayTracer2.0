@@ -1,6 +1,6 @@
 #pragma once
 #include <cmath>
-#include "FloatCompare.h"
+#include "MyMath.h"
 
 class Vec4 {
 public:
@@ -81,6 +81,14 @@ public:
 			compareFloat(y, rhs.y) &&
 			compareFloat(z, rhs.z) && 
 			compareFloat(w, rhs.w);
+	}
+
+	Vec4& Reflect(const Vec4& normal) {
+		return *this = *this - normal * 2 * (*this * normal);
+	}
+
+	Vec4 GetReflected(const Vec4& normal)const {
+		return Vec4(*this).Reflect(normal);
 	}
 	
 	float GetLengthSqr()const {

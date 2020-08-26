@@ -6,7 +6,7 @@ Sphere::Sphere() {
 	transformMat = Matrix::GetIdentity();
 }
 
-void Sphere::SetTrasnformMat(const Matrix& mat) {
+void Sphere::SetTransformMat(const Matrix& mat) {
 	transformMat = mat;
 }
 
@@ -24,4 +24,12 @@ void Sphere::Scale(const Matrix& mat) {
 
 Matrix Sphere::GetTransformMat() const {
 	return transformMat;
+}
+
+Vec4 Sphere::NormalAt(const Vec4& world_point) const {
+	Vec4 object_point = transformMat.Inverse() * world_point;
+	Vec4 object_normal = object_point - Vec4::MakePoint(0, 0, 0);
+	Vec4 world_normal = transformMat.Inverse().Transpose() * object_normal;
+	world_normal.w = 0;
+	return world_normal.Normalize();
 }

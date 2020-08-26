@@ -1,3 +1,4 @@
+// ReSharper disable CppFunctionalStyleCast
 #include "Canvas.h"
 #include <iostream>
 #include <algorithm>
@@ -37,9 +38,9 @@ bool Canvas::init() {
 		return false;
 	}
 
-	m_buffer = new Uint32[Uint32(width*height)];
+	m_buffer = new Uint32[Uint32(width)*Uint32(height)];
 
-	memset(m_buffer, 0, Uint32(width*height) * sizeof(Uint32));
+	memset(m_buffer, 0, Uint32(width)*Uint32(height) * sizeof(Uint32));
 
 	update();
 
@@ -95,7 +96,7 @@ void Canvas::close() {
 }
 
 void Canvas::clearScreen() {
-	memset(m_buffer, 0, width * height * sizeof(Uint32));
+	memset(m_buffer, 0, size_t(width) * size_t(height) * sizeof(Uint32));
 }
 
 void Canvas::render(const Sphere& s) {

@@ -1,5 +1,5 @@
 #pragma once
-#include "FloatCompare.h"
+#include "MyMath.h"
 
 class Color {
 public:

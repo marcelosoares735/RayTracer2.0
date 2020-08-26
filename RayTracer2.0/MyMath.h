@@ -3,7 +3,8 @@
 #include <random>
 
 
-constexpr float EPSILON = 0.00001F;
+constexpr float EPSILON = 0.00001f;
+constexpr float PI = 3.14159265f;
 
 inline bool compareFloat(float a, float b) {
 	if (std::abs(a - b) < EPSILON) return true;

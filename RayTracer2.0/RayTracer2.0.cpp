@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
 
 	if (canvas.init() == false) return -1;
 	Sphere s;
+	s.Rotate(Matrix::GetScalingMat(1,3,1));
 	canvas.render(s);
 
 	while (true) {
