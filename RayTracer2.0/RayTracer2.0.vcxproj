@@ -164,6 +164,7 @@
   <ItemGroup>
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Intersection.cpp" />
+    <ClCompile Include="LightSources.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="RayTracer2.0.cpp" />
     <ClCompile Include="Shape.cpp" />
