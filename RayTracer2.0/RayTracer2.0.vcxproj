@@ -165,6 +165,7 @@
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Intersection.cpp" />
     <ClCompile Include="LightSources.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="RayTracer2.0.cpp" />
     <ClCompile Include="Shape.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="LightSources.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="MyMath.h" />
     <ClInclude Include="Intersection.h" />
     <ClInclude Include="Matrix.h" />

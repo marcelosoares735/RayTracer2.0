@@ -6,6 +6,14 @@ Sphere::Sphere() {
 	transformMat = Matrix::GetIdentity();
 }
 
+void Sphere::SetMaterial(Material material) {
+	this->material = material;
+}
+
+Material Sphere::GetMaterial() const {
+	return material;
+}
+
 void Sphere::SetTransformMat(const Matrix& mat) {
 	transformMat = mat;
 }
