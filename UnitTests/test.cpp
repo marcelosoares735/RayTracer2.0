@@ -7,6 +7,7 @@
 #include "../RayTracer2.0/Intersection.h"
 #include "../RayTracer2.0/LightSources.h"
 #include "../RayTracer2.0/Lighting.h"
+#include "../RayTracer2.0/World.h"
 
 TEST(testTestCase, TestTest) {
 	Vec4 a(1, 2, 3, 4);
@@ -231,4 +232,16 @@ TEST(ShaderTest, LightingTest) {
 	Color result = Lighting(material, light, position, eye_vec, normal_vec);
 
 	ASSERT_EQ(Color(0.1f, 0.1f, 0.1f), result);
+}
+
+TEST(IntersectionTest, IntersectWorldTest) {
+	World world;
+	Ray ray(Vec4::MakePoint(0, 0, -5), Vec4::MakeVector(0, 0, 1));
+	auto intersections = IntersectWorld(world, ray);
+
+	ASSERT_EQ(4, intersections.at(0).t);
+	ASSERT_EQ(4.5f, intersections.at(1).t);
+	ASSERT_EQ(5.5f, intersections.at(2).t);
+	ASSERT_EQ(6, intersections.at(3).t);
+	
 }

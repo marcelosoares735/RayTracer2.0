@@ -32,6 +32,19 @@ Intersection Hit(std::vector<Intersection>& intersections) {
 	return *result;
 }
 
+std::vector<Intersection> IntersectWorld(const World& world, const Ray& ray) {
+	auto [first1, second1] = Intersect(world.GetSphere1(), ray);
+	std::vector<Intersection> intersections;
+	intersections.push_back(first1);
+	intersections.push_back(second1);
+
+	auto [first2, second2] = Intersect(world.GetSphere2(), ray);
+	intersections.push_back(first2);
+	intersections.push_back(second2);
+	std::sort(intersections.begin(), intersections.end());
+	return std::move(intersections);
+}
+
 bool Intersection::operator<(const Intersection& rhs)const {
 	return t < rhs.t;
 }

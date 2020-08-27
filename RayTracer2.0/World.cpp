@@ -14,4 +14,6 @@ Sphere World::GetSphere2() const {
 	return s2;
 }
 
-PointLight World::GetLight() const {}
+PointLight World::GetLight() const {
+	return light;
+}
