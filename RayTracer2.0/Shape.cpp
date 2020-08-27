@@ -1,6 +1,11 @@
 #include "Shape.h"
 
 int Sphere::count = 0;
+
+Sphere::Sphere(Material material):Sphere() {
+	this->material = material;
+}
+
 Sphere::Sphere() {
 	id = count++;
 	transformMat = Matrix::GetIdentity();

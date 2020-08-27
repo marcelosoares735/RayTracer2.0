@@ -5,6 +5,8 @@
 #include "../RayTracer2.0/Ray.h"
 #include "../RayTracer2.0/Shape.h"
 #include "../RayTracer2.0/Intersection.h"
+#include "../RayTracer2.0/LightSources.h"
+#include "../RayTracer2.0/Lighting.h"
 
 TEST(testTestCase, TestTest) {
 	Vec4 a(1, 2, 3, 4);
@@ -196,14 +198,14 @@ TEST(MatrixTest, RotationMatX) {
 //	ASSERT_EQ(true, compareFloat(7, intersec.second.t));
 //}
 //
-//TEST(IntersectioTest, TranslatedSphereIntersectionTest) {
-//	Ray r(Vec4::MakePoint(0, 0, -5), Vec4::MakeVector(0, 0, 1));
-//	Sphere s;
-//	s.SetTrasnformMat(Matrix::GetTranslationMat(5,0,0));
-//	auto intersec = Intersect(s, r);
-//	ASSERT_EQ(nullptr, intersec.first.object);
-//	
-//}
+TEST(IntersectioTest, TranslatedSphereIntersectionTest) {
+	Ray r(Vec4::MakePoint(0, 0, -5), Vec4::MakeVector(0, 0, 1));
+	Sphere s;
+	s.SetTransformMat(Matrix::GetTranslationMat(5,0,0));
+	auto intersec = Intersect(s, r);
+	ASSERT_EQ(nullptr, intersec.first.object);
+	
+}
 
 TEST(NormalTest, TransformedNormal) {
 	Sphere s;
@@ -218,4 +220,15 @@ TEST(VectorTest, ReflectVectoTest) {
 	Vec4 n = Vec4::MakeVector(sqrt(2.f) / 2, sqrt(2.f) / 2, 0);
 
 	ASSERT_EQ(Vec4::MakeVector(1, 0, 0), v.GetReflected(n));
+}
+
+TEST(ShaderTest, LightingTest) {
+	Material material;
+	Vec4 position = Vec4::MakePoint(0, 0, 0);
+	Vec4 eye_vec = Vec4::MakeVector(0, 0, -1);
+	Vec4 normal_vec = Vec4::MakeVector(0, 0, -1);
+	PointLight light(Vec4::MakePoint(0, 0, 10), Color(1, 1, 1));
+	Color result = Lighting(material, light, position, eye_vec, normal_vec);
+
+	ASSERT_EQ(Color(0.1f, 0.1f, 0.1f), result);
 }

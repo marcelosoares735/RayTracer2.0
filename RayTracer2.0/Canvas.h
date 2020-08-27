@@ -2,6 +2,8 @@
 #include "SDL.h"
 #include "Color.h"
 #include "Shape.h"
+#include "LightSources.h"
+
 
 class Canvas {
 
@@ -21,6 +23,6 @@ public:
 	void update();
 	void setPixel(int x, int y, Color color);
 	void clearScreen();
-	void render(const Sphere& s);
-	
+	void render(const Sphere& s, const PointLight& light);
+	void WritePPM();
 };

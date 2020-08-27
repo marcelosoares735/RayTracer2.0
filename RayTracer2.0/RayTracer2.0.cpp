@@ -12,7 +12,7 @@
 
 int main(int argc, char *argv[])
 {
-	Canvas canvas(500, 500);
+	/*Canvas canvas(500, 500);
 
 	if (canvas.init() == false) return -1;
 	Sphere s;
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 			break;
 	}
 
-	canvas.close();
+	canvas.close();*/
 	return 0;
 }
 

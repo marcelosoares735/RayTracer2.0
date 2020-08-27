@@ -11,6 +11,10 @@ Material::Material(Color c, float ambient, float diffuse, float specular, float 
 	shininess(shininess)
 {}
 
+Material::Material(Color c):Material() {
+	color = c;
+}
+
 void Material::SetColor(Color c) {
 	color = c;
 }

@@ -11,6 +11,7 @@ private:
 public:
 	Material();
 	Material(Color c, float ambient, float diffuse, float specular, float shininess);
+	Material(Color c);
 	void SetColor(Color c);
 	void SetAmbient(float ambient);
 	void SetDiffuse(float diffuse);

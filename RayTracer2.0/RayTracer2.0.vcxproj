@@ -46,7 +46,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -164,6 +164,7 @@
   <ItemGroup>
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Intersection.cpp" />
+    <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="LightSources.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Ray.cpp" />
@@ -173,6 +174,7 @@
   <ItemGroup>
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Lighting.h" />
     <ClInclude Include="LightSources.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MyMath.h" />

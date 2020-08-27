@@ -4,18 +4,21 @@
 #include "../RayTracer2.0/Ray.h"
 #include "SDL.h"
 #include "../RayTracer2.0/Canvas.h"
+#include "../RayTracer2.0/Lighting.h"
 #include <iostream>
 
 int main(int argc, char* argv[])
 {
-	Canvas canvas(100, 100);
+	Canvas canvas(300, 300);
 
 	if (!canvas.init()) return -1;
+	Sphere s(Material(Color(1,0.2f,1)));
+	s.SetTransformMat(Matrix::GetTranslationMat(1, 0, 0) * Matrix::GetRotationZMat(PI / 2) * Matrix::GetScalingMat(.5f, 1, 1)  );
+	PointLight light(Vec4::MakePoint(-10, 10, -10), Color(1, 1, 1));
+	canvas.render(s, light);
 
-	Sphere s;
-	//s.Rotate(Matrix::GetScalingMat(1, 3, 1));
-	canvas.render(s);
-
+	canvas.WritePPM();
+	
 	while (true) {
 		if (canvas.processEvents() == false)
 			break;
@@ -23,8 +26,8 @@ int main(int argc, char* argv[])
 
 	canvas.close();
 	return 0;
-	Ray r;
-    std::cout << "Hello World!\n";
+	
+    
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

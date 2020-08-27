@@ -3,8 +3,11 @@
 #include <iostream>
 #include <algorithm>
 #include <cassert>
+#include <fstream>
+
 #include "Ray.h"
 #include "Intersection.h"
+#include "Lighting.h"
 
 
 bool Canvas::init() {
@@ -55,14 +58,15 @@ void Canvas::setPixel(int x, int y, Color color) {
 	
 	Uint32 finalColor = 0;
 
-	Uint8 r = std::clamp(Uint8(color.r * 255), Uint8(0), Uint8(255));
-	Uint8 g = std::clamp(Uint8(color.g * 255), Uint8(0), Uint8(255));
-	Uint8 b = std::clamp(Uint8(color.b * 255), Uint8(0), Uint8(255));
+	Uint8 r = Uint8 (std::clamp(color.r * 255.f, 0.f, 255.f));
+	Uint8 g = Uint8 (std::clamp(color.g * 255.f, 0.f, 255.f));
+	Uint8 b = Uint8 (std::clamp(color.b * 255.f, 0.f, 255.f));
 	finalColor += (r << 24 | g << 16 | b << 8 | 0xff );
-	/*finalColor <<= 8;
-	finalColor += green;
+	/*finalColor += r;
 	finalColor <<= 8;
-	finalColor += blue;
+	finalColor += g;
+	finalColor <<= 8;
+	finalColor += b;
 	finalColor <<= 8;
 	finalColor += 0xff;*/
 
@@ -99,7 +103,9 @@ void Canvas::clearScreen() {
 	memset(m_buffer, 0, size_t(width) * size_t(height) * sizeof(Uint32));
 }
 
-void Canvas::render(const Sphere& s) {
+
+
+void Canvas::render(const Sphere& s, const PointLight& light) {
 	float wall_z = 10;
 	float wall_size = 7;
 	float pixel_size = wall_size / width;
@@ -107,21 +113,64 @@ void Canvas::render(const Sphere& s) {
 	std::vector<Intersection> intersections;
 	intersections.reserve(2);
 	for (int y = 0; y < height; y++) {
-		float world_y = half - y * pixel_size ;
+		float world_y = half - float(y) * pixel_size ;
 		for (int x = 0; x < width; x++) {
-			float world_x = -half + pixel_size * x;
+			const float world_x = -half + pixel_size * float(x);
 			Vec4 position = Vec4::MakePoint(world_x, world_y, wall_z);
-			Ray ray;
-			ray.SetOrigin(Vec4::MakePoint(0, 0, -5));
-			ray.SetDir((position - ray.GetOrigin()).Normalize());
-			auto intersec = Intersect(s, ray);
-			intersections.push_back(intersec.first);
-			intersections.push_back(intersec.second);
-			if(Hit(intersections).object != nullptr)
-				setPixel(x, y, Colors::Blue);
+			Ray ray(Vec4::MakePoint(0, 0, -5),
+				(position - Vec4::MakePoint(0, 0, -5)).Normalize());
+			
+			auto [first, second] = Intersect(s, ray);
+			intersections.push_back(first);
+			intersections.push_back(second);
+			
+			Intersection hit = Hit(intersections);
+			if(hit.object != nullptr) {
+				Vec4 point = ray.PositionAt(hit.t);
+				Vec4 normal = hit.object->NormalAt(point);
+				Vec4 eye_vec = -ray.GetDir();
+				const Color pixel_color = Lighting(s.GetMaterial(), light, point, eye_vec, normal);
+				setPixel(x, y, pixel_color);
+			}
+				
 			update();
 			processEvents();
 			intersections.clear();
 		}
 	}
+}
+
+void Canvas::WritePPM() {
+	std::ofstream img;
+	img.open("RayTracer.ppm");
+	img << "P3" << std::endl;
+	char str1[30];
+	char str2[30];
+
+	_itoa_s(width, str1, 10);
+	_itoa_s(height, str2, 10);
+	img << str1 << " " << str2 << std::endl;
+	_itoa_s(255, str1, 10);
+	img << str1 << std::endl;
+	int elementoLinha = 0;
+	for (int i = 0; i < width * height; i++) {
+		char red[10], green[10], blue[10];
+		int r = (m_buffer[i] & 0xff000000) >> 24;
+		int g = (m_buffer[i] & 0x00ff0000) >> 16;
+		int b = (m_buffer[i] & 0x0000ff00) >> 8;
+		_itoa_s(r, red, 10);
+		_itoa_s(g, green, 10);
+		_itoa_s(b, blue, 10);
+
+		img << red << " " << green << " " << blue;
+		if (elementoLinha == 17)
+			img << std::endl;
+		else
+			img << " ";
+
+		elementoLinha++;
+	}
+
+	img.close();
+	std::cout << "Saved PPM image" << std::endl;
 }

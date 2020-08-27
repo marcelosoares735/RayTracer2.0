@@ -10,6 +10,7 @@ private:
 	Material material;
 	
 public:
+	Sphere(Material material);
 	Sphere();
 	void SetMaterial(Material material);
 	Material GetMaterial()const;

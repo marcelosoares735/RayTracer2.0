@@ -8,6 +8,7 @@ public:
 	float b = 0.0f;
 public:
 	Color(float r, float g, float b): r(r),g(g),b(b){}
+	Color() = default;
 
 	Color& operator +=(const Color& rhs) {
 		r += rhs.r;
