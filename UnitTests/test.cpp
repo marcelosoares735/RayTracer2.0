@@ -203,7 +203,7 @@ TEST(IntersectioTest, TranslatedSphereIntersectionTest) {
 	Ray r(Vec4::MakePoint(0, 0, -5), Vec4::MakeVector(0, 0, 1));
 	Sphere s;
 	s.SetTransformMat(Matrix::GetTranslationMat(5,0,0));
-	auto intersec = Intersect(s, r);
+	auto intersec = Intersect(&s, r);
 	ASSERT_EQ(nullptr, intersec.first.object);
 	
 }
@@ -244,4 +244,51 @@ TEST(IntersectionTest, IntersectWorldTest) {
 	ASSERT_EQ(5.5f, intersections.at(2).t);
 	ASSERT_EQ(6, intersections.at(3).t);
 	
+}
+
+TEST(IntersectionTest, PrepareComputationsTest) {
+	Ray ray(Vec4::MakePoint(0, 0, -5), Vec4::MakeVector(0, 0, 1));
+	Sphere s;
+	Intersection inter(4, &s);
+	Computations comps = PrepareComputations(inter, ray);
+
+	ASSERT_EQ(comps.object, inter.object);
+	ASSERT_EQ(comps.t, inter.t);
+	ASSERT_EQ(comps.point, Vec4::MakePoint(0,0,-1));
+	ASSERT_EQ(comps.eye_vec, Vec4::MakeVector(0,0,-1));
+	ASSERT_EQ(comps.normal_vec, Vec4::MakeVector(0,0,-1));
+}
+
+TEST(IntersectionTest, PrepareComputationsInsideTest) {
+	Ray ray(Vec4::MakePoint(0, 0, 0), Vec4::MakeVector(0, 0, 1));
+	Sphere s;
+	Intersection inter(1, &s);
+	Computations comps = PrepareComputations(inter, ray);
+
+	ASSERT_EQ(comps.inside, true);
+	ASSERT_EQ(comps.t, inter.t);
+	ASSERT_EQ(comps.point, Vec4::MakePoint(0, 0, 1));
+	ASSERT_EQ(comps.eye_vec, Vec4::MakeVector(0, 0, -1));
+	ASSERT_EQ(comps.normal_vec, Vec4::MakeVector(0, 0, -1));
+}
+
+TEST(ShaderTest, ShadeHitTest) {
+	World world;
+	world.SetLight(PointLight(Vec4::MakePoint(0, 0.25f, 0), Colors::White));
+	Ray ray(Vec4::MakePoint(0, 0, 0), Vec4::MakeVector(0, 0, 1));
+	auto i = Intersection(0.5f, world.GetSphere2Pointer());
+	auto comps = PrepareComputations(i, ray);
+	auto c = ShadeHit(world, comps);
+
+	ASSERT_EQ(Color(0.90498f, 0.90498f, 0.90498f), c);
+}
+
+TEST(ShaderTest, ColorAtTest) {
+	World world;
+	
+	Ray ray(Vec4::MakePoint(0, 0, 0.75f), Vec4::MakeVector(0, 0, -1));
+
+	auto c = ColorAt(world, ray);
+
+	ASSERT_EQ(world.GetSphere2().GetMaterial().GetColor(), c);
 }

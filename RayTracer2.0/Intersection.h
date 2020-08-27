@@ -12,9 +12,18 @@ struct Intersection {
 	Intersection() = default;
 };
 
+struct Computations {
+	float t;
+	const Sphere* object;
+	Vec4 point;
+	Vec4 eye_vec;
+	Vec4 normal_vec;
+	bool inside;
+};
 
 
-std::pair<Intersection, Intersection> Intersect(const Sphere& object, const Ray& ray);
+Computations PrepareComputations(const Intersection& intersection, const Ray& ray);
+std::pair<Intersection, Intersection> Intersect(const Sphere* object, const Ray& ray);
 Intersection Hit(std::vector<Intersection>& intersections);
 std::vector<Intersection> IntersectWorld(const World& world, const Ray& ray);
 

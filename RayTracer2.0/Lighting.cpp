@@ -24,3 +24,18 @@ Color Lighting(const Material& material, const PointLight& light, const Vec4& po
 
 	return ambient + diffuse + specular;
 }
+
+Color ShadeHit(const World& world, const Computations& comps) {
+	return Lighting(comps.object->GetMaterial(), world.GetLight(), comps.point, comps.eye_vec, comps.normal_vec);
+}
+
+Color ColorAt(const World& world, const Ray& ray) {
+	auto intersections = IntersectWorld(world, ray);
+	const Intersection hit = Hit(intersections);
+
+	if (hit.object == nullptr) return Colors::Black;
+
+	const Computations comps = PrepareComputations(hit, ray);
+
+	return ShadeHit(world, comps);
+}

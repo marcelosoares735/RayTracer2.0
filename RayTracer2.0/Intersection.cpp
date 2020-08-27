@@ -2,8 +2,27 @@
 #include <algorithm>
 #include <cassert>
 
-std::pair<Intersection, Intersection> Intersect( const Sphere& object, const Ray& ray) {
-	const Ray transformed_ray = ray * object.GetTransformMat().Inverse();
+Computations PrepareComputations(const Intersection& intersection, const Ray& ray) {
+	Computations comps;
+	comps.t = intersection.t;
+	comps.object = intersection.object;
+
+	comps.point = ray.PositionAt(comps.t);
+	comps.eye_vec = -ray.GetDir();
+	comps.normal_vec = comps.object->NormalAt(comps.point);
+
+	if(comps.normal_vec * comps.eye_vec < 0) {
+		comps.inside = true;
+		comps.normal_vec = -comps.normal_vec;
+	}else {
+		comps.inside = false;
+	}
+	
+	return comps;
+}
+
+std::pair<Intersection, Intersection> Intersect( const Sphere* object, const Ray& ray) {
+	const Ray transformed_ray = ray * object->GetTransformMat().Inverse();
 	const Vec4 sphere_to_ray = transformed_ray.GetOrigin() - Vec4::MakePoint(0, 0, 0);
 	const float a = transformed_ray.GetDir() * transformed_ray.GetDir();
 	const float b = (transformed_ray.GetDir() * sphere_to_ray) * 2;
@@ -14,7 +33,7 @@ std::pair<Intersection, Intersection> Intersect( const Sphere& object, const Ray
 	if (discriminant < 0) return std::make_pair(Intersection(), Intersection());
 
 	Intersection inter1, inter2;
-	inter2.object = inter1.object = &object;
+	inter2.object = inter1.object = object;
 	inter1.t = (-b - std::sqrt(discriminant)) / (2 * a);
 	inter2.t = (-b + std::sqrt(discriminant)) / (2 * a);
 
@@ -33,16 +52,16 @@ Intersection Hit(std::vector<Intersection>& intersections) {
 }
 
 std::vector<Intersection> IntersectWorld(const World& world, const Ray& ray) {
-	auto [first1, second1] = Intersect(world.GetSphere1(), ray);
+	auto [first1, second1] = Intersect(world.GetSphere1Pointer(), ray);
 	std::vector<Intersection> intersections;
 	intersections.push_back(first1);
 	intersections.push_back(second1);
 
-	auto [first2, second2] = Intersect(world.GetSphere2(), ray);
+	auto [first2, second2] = Intersect(world.GetSphere2Pointer(), ray);
 	intersections.push_back(first2);
 	intersections.push_back(second2);
 	std::sort(intersections.begin(), intersections.end());
-	return std::move(intersections);
+	return intersections;
 }
 
 bool Intersection::operator<(const Intersection& rhs)const {

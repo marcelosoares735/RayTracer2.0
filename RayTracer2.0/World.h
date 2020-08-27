@@ -11,5 +11,8 @@ public:
 	World();
 	Sphere GetSphere1()const;
 	Sphere GetSphere2()const;
+	const Sphere* GetSphere1Pointer()const;
+	const Sphere* GetSphere2Pointer()const;
 	PointLight GetLight()const;
+	void SetLight(PointLight light);
 };

@@ -120,7 +120,7 @@ void Canvas::render(const Sphere& s, const PointLight& light) {
 			Ray ray(Vec4::MakePoint(0, 0, -5),
 				(position - Vec4::MakePoint(0, 0, -5)).Normalize());
 			
-			auto [first, second] = Intersect(s, ray);
+			auto [first, second] = Intersect(&s, ray);
 			intersections.push_back(first);
 			intersections.push_back(second);
 			
