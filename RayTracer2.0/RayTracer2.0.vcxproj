@@ -170,6 +170,7 @@
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="RayTracer2.0.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Canvas.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="Vec4.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
