@@ -8,6 +8,8 @@
 #include "../RayTracer2.0/LightSources.h"
 #include "../RayTracer2.0/Lighting.h"
 #include "../RayTracer2.0/World.h"
+#include "../RayTracer2.0/Camera.h"
+
 
 TEST(testTestCase, TestTest) {
 	Vec4 a(1, 2, 3, 4);
@@ -292,3 +294,29 @@ TEST(ShaderTest, ColorAtTest) {
 
 	ASSERT_EQ(world.GetSphere2().GetMaterial().GetColor(), c);
 }
+
+TEST(MatrixTest, ViewTransformTest) {
+	Vec4 from(1, 3, 2, 1);
+	Vec4 to(4, -2, 8, 1);
+	Vec4 up(1, 1, 0, 0);
+
+	Matrix t = Matrix::GetViewTransformMat(from, to, up);
+
+	float data[] = { -0.50709f, 0.50709f, 0.67612f, -2.36643f,
+					0.76772f, 0.60609f, 0.12122f, -2.82843f,
+					-0.35857f, .59761f, -0.71714f, 0,
+					0,0,0,1 };
+	Matrix result(data);
+	
+	ASSERT_EQ(result, t);
+}
+
+TEST(CameraTest, RayForPixelTest) {
+	Camera camera(201, 101, PI / 2);
+	camera.SetTransformMat(Matrix::GetRotationYMat(PI / 4) * Matrix::GetTranslationMat(0, -2, 5));
+	Ray r = camera.RayForPixel(100,50);
+	Ray result(Vec4::MakePoint(0, 2, -5), Vec4::MakeVector(sqrt(2.f) / 2.f, 0, -sqrt(2.f) / 2.f));
+
+	ASSERT_EQ(result, r);
+}
+

@@ -3,6 +3,8 @@
 #include "Color.h"
 #include "Shape.h"
 #include "LightSources.h"
+#include "World.h"
+#include "Camera.h"
 
 
 class Canvas {
@@ -23,6 +25,6 @@ public:
 	void update();
 	void setPixel(int x, int y, Color color);
 	void clearScreen();
-	void render(const Sphere& s, const PointLight& light);
+	void render(const World& world, const Camera& camera);
 	void WritePPM();
 };

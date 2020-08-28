@@ -5,15 +5,19 @@
 #include "SDL.h"
 #include "../RayTracer2.0/Canvas.h"
 #include "../RayTracer2.0/Lighting.h"
+#include "../RayTracer2.0/ConfigLoader.h"
 #include <iostream>
 
 int main(int argc, char* argv[])
 {
-	Canvas canvas(300, 300);
+	Config config;
+	config.Load();
+	
+	Canvas canvas(config.screen_width, config.screen_height);
 
 	if (!canvas.init()) return -1;
 	Sphere s(Material(Color(1,0.2f,1)));
-	s.SetTransformMat(Matrix::GetTranslationMat(1, 0, 0) * Matrix::GetRotationZMat(PI / 2) * Matrix::GetScalingMat(.5f, 1, 1)  );
+	
 	PointLight light(Vec4::MakePoint(-10, 10, -10), Color(1, 1, 1));
 	canvas.render(s, light);
 

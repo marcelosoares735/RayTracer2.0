@@ -155,6 +155,26 @@ public:
 
 		return shear;
 	}
+
+	static Matrix GetViewTransformMat(const Vec4& from, const Vec4& to, const Vec4& up) {
+		const Vec4 forward = (to - from).Normalize();
+		const Vec4 up_norm = up.GetNormalizedVec();
+		const Vec4 left = forward.CrossProduct(up_norm);
+		const Vec4 true_up = left.CrossProduct(forward);
+
+		Matrix orientation = GetIdentity();
+		orientation(0, 0) = left.x;
+		orientation(0, 1) = left.y;
+		orientation(0, 2) = left.z;
+		orientation(1, 0) = true_up.x;
+		orientation(1, 1) = true_up.y;
+		orientation(1, 2) = true_up.z;
+		orientation(2, 0) = -forward.x;
+		orientation(2, 1) = -forward.y;
+		orientation(2, 2) = -forward.z;
+
+		return orientation * GetTranslationMat(-from.x, -from.y, -from.z);
+	}
 	
 	Matrix(int order = 4): size(order) {
 		std::memset(data, 0, sizeof(float) * 16);

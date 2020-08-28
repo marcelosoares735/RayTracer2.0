@@ -113,6 +113,14 @@ public:
 	float DotProduct(const Vec4& rhs)const {
 		return x * rhs.x + y * rhs.y + z * rhs.z + w * rhs.w;
 	}
+
+	Vec4 CrossProduct(const Vec4& rhs)const {
+		return { y * rhs.z - z * rhs.y,
+				z * rhs.x - x * rhs.z,
+				x * rhs.y - y * rhs.x,
+				0
+		};
+	}
 };
 
 inline float DotProduct(const Vec4& a, const Vec4& b) {

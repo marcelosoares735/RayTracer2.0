@@ -162,6 +162,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Intersection.cpp" />
     <ClCompile Include="Lighting.cpp" />
@@ -173,8 +174,10 @@
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="ConfigLoader.h" />
     <ClInclude Include="Lighting.h" />
     <ClInclude Include="LightSources.h" />
     <ClInclude Include="Material.h" />

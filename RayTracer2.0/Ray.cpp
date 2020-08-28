@@ -42,3 +42,7 @@ Ray& Ray::operator*=(const Matrix& mat) {
 Ray Ray::operator*(const Matrix& mat)const {
 	return Ray(*this) *= mat;
 }
+
+bool Ray::operator==(const Ray& rhs) const {
+	return dir == rhs.dir && origin == rhs.origin;
+}

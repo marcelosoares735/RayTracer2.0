@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <cassert>
 #include <fstream>
-
+#include "Camera.h"
 #include "Ray.h"
 #include "Intersection.h"
 #include "Lighting.h"
@@ -105,39 +105,18 @@ void Canvas::clearScreen() {
 
 
 
-void Canvas::render(const Sphere& s, const PointLight& light) {
-	float wall_z = 10;
-	float wall_size = 7;
-	float pixel_size = wall_size / width;
-	float half = wall_size / 2;
-	std::vector<Intersection> intersections;
-	intersections.reserve(2);
+void Canvas::render(const World& world, const Camera& camera) {
+	
 	for (int y = 0; y < height; y++) {
-		float world_y = half - float(y) * pixel_size ;
 		for (int x = 0; x < width; x++) {
-			const float world_x = -half + pixel_size * float(x);
-			Vec4 position = Vec4::MakePoint(world_x, world_y, wall_z);
-			Ray ray(Vec4::MakePoint(0, 0, -5),
-				(position - Vec4::MakePoint(0, 0, -5)).Normalize());
-			
-			auto [first, second] = Intersect(&s, ray);
-			intersections.push_back(first);
-			intersections.push_back(second);
-			
-			Intersection hit = Hit(intersections);
-			if(hit.object != nullptr) {
-				Vec4 point = ray.PositionAt(hit.t);
-				Vec4 normal = hit.object->NormalAt(point);
-				Vec4 eye_vec = -ray.GetDir();
-				const Color pixel_color = Lighting(s.GetMaterial(), light, point, eye_vec, normal);
-				setPixel(x, y, pixel_color);
-			}
-				
-			update();
-			processEvents();
-			intersections.clear();
+
+			const Ray ray = camera.RayForPixel(x, y);
+			const Color color = ColorAt(world, ray);
+			setPixel(x, y, color);
 		}
 	}
+
+	WritePPM();
 }
 
 void Canvas::WritePPM() {

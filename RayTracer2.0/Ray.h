@@ -20,4 +20,5 @@ public:
 	Ray GetTransformedRay(const Matrix& mat)const;
 	Ray& operator*=(const Matrix& mat);
 	Ray operator*(const Matrix& mat)const;
+	bool operator==(const Ray& rhs)const;
 };
